@@ -1,0 +1,26 @@
+name: propflowmol
+channels:
+  - pytorch
+  - nvidia
+  - pyg
+  - dglteam/label/cu121
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pytorch=2.2.0
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=12.1
+  - pytorch-cluster=1.6.3
+  - pytorch-scatter=2.1.2=py310_torch_2.2.0_cu121
+  - dgl=2.0.0.cu121=py310_0
+  - pytorch-lightning=2.1.3
+  - rdkit=2023.09.4
+  - pystow
+  - einops
+  - pip
+  - pip:
+      - wandb
+      - useful_rdkit_utils
+      - py3Dmol
+      - ase
