@@ -1,0 +1,4 @@
+wandb
+useful_rdkit_utils
+py3Dmol
+ase

@@ -13,10 +13,10 @@ import dgl
 import sys
 
 # from models.ligand_edm import LigandEquivariantDiffusion
-from propflowmol.models.flowmol import FlowMol
-from propflowmol.data_processing.data_module import MoleculeDataModule
-from propflowmol.model_utils.sweep_config import merge_config_and_args, register_hyperparameter_args
-from propflowmol.model_utils.load import read_config_file, model_from_config, data_module_from_config
+from flowmol.models.flowmol import FlowMol
+from flowmol.data_processing.data_module import MoleculeDataModule
+from flowmol.model_utils.sweep_config import merge_config_and_args, register_hyperparameter_args
+from flowmol.model_utils.load import read_config_file, model_from_config, data_module_from_config
 
 def parse_args():
     p = argparse.ArgumentParser(description='Training Script')
@@ -34,8 +34,8 @@ def parse_args():
 
     args = p.parse_args()
 
-    if args.config is not None and args.resume is not None:
-        raise ValueError('only specify a config file or a resume file but not both')
+    # if args.config is not None and args.resume is not None:
+    #     raise ValueError('only specify a config file or a resume file but not both')
 
     return args
 
@@ -59,11 +59,12 @@ if __name__ == "__main__":
         else:
             raise ValueError('resume argument must be a run directory or a checkpoint file that must already exist')
         
-        config_file = run_dir / 'config.yaml'
+        # config_file = run_dir / 'config.yaml'
     else:
-        config_file = args.config
+        # config_file = args.config
         ckpt_file = None
 
+    config_file = args.config
 
     # set seed
     if args.seed is not None:
@@ -98,7 +99,6 @@ if __name__ == "__main__":
     wandb_config['save_dir'] = str(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    
     # create wandb logger
     wandb_logger = WandbLogger(config=config, **wandb_config)
     # wandb_logger.experiment # not sure why this line is here...

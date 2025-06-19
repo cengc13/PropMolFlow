@@ -15,8 +15,8 @@ from rdkit import Chem
 from multiprocessing import Pool
 import pandas as pd
 
-from propflowmol.data_processing.geom import MoleculeFeaturizer
-from propflowmol.utils.dataset_stats import compute_p_c_given_a
+from flowmol.data_processing.geom import MoleculeFeaturizer
+from flowmol.utils.dataset_stats import compute_p_c_given_a
 
 def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
@@ -38,15 +38,15 @@ def parse_args():
 
 def process_all_molecules(dataset_config, args):
     raw_dir = Path(dataset_config['raw_data_dir']) 
-    sdf_file = raw_dir / 'gdb9.sdf'
-    bad_mols_file = raw_dir / 'uncharacterized.txt'
+    sdf_file = raw_dir / 'all_fixed_gdb9.sdf'
+    # bad_mols_file = raw_dir / 'uncharacterized.txt'
 
-    # Get ids to skip
-    ids_to_skip = []
-    with open(bad_mols_file, 'r') as f:
-        lines = f.read().split('\n')[9:-2]
-        for x in lines:
-            ids_to_skip.append(int(x.split()[0]) - 1)
+    # # Get ids to skip
+    # ids_to_skip = []
+    # with open(bad_mols_file, 'r') as f:
+    #     lines = f.read().split('\n')[9:-2]
+    #     for x in lines:
+    #         ids_to_skip.append(int(x.split()[0]) - 1)
 
     # Initialize storage
     mol_features = {
@@ -69,7 +69,8 @@ def process_all_molecules(dataset_config, args):
     chunk_size = args.chunk_size
     
     for global_idx, mol in enumerate(mol_reader):
-        if mol is None or global_idx in ids_to_skip:
+        # if mol is None or global_idx in ids_to_skip:
+        if mol is None:
             continue
         all_mols.append(mol)
         chunk_indices.append(global_idx)
@@ -291,17 +292,19 @@ if __name__ == "__main__":
     df = pd.read_csv(qm9_csv_file)
 
     mol_features, valid_mol_idxs, all_bond_order_counts = process_all_molecules(dataset_config, args)
-    np.save('./data/qm9_raw/valid_id.npy', np.array(valid_mol_idxs))
 
     n_samples = len(valid_mol_idxs)
     n_train = 100000
+    n_train_half = n_train // 2  # Split train data in half
     n_test = int(0.1 * n_samples)
     n_val = n_samples - (n_train + n_test)
 
     # print the number of samples in each split
     print(f"Number of samples in train split: {n_train}")
-    print(f"Number of samples in test split: {n_test}")
+    print(f"Number of samples in train_a split: {n_train_half}")
+    print(f"Number of samples in train_b split: {n_train_half}")
     print(f"Number of samples in val split: {n_val}")
+    print(f"Number of samples in test split: {n_test}")
 
     # First shuffle the valid_mol_idxs
     np.random.seed(42)  # For reproducibility
@@ -309,21 +312,30 @@ if __name__ == "__main__":
 
     # Split the shuffled indices into train/val/test
     train_idx = shuffled_indices[:n_train]
+    train_a_idx = shuffled_indices[:n_train_half]
+    train_b_idx = shuffled_indices[n_train_half:n_train]
     val_idx = shuffled_indices[n_train:n_train+n_val]
     test_idx = shuffled_indices[n_train+n_val:]    
 
     # Get original molecule indices for each split
     train_mol_idx = [valid_mol_idxs[i] for i in train_idx]
+    np.save(Path(dataset_config['raw_data_dir']) / 'train_mol_idxs.npy', train_mol_idx)
+    train_a_mol_idx = [valid_mol_idxs[i] for i in train_a_idx]
+    train_b_mol_idx = [valid_mol_idxs[i] for i in train_b_idx]
     val_mol_idx = [valid_mol_idxs[i] for i in val_idx]
     test_mol_idx = [valid_mol_idxs[i] for i in test_idx]
 
     # Get features for each split
     train_features = get_split_features(train_idx, mol_features)
+    train_a_features = get_split_features(train_a_idx, mol_features)
+    train_b_features = get_split_features(train_b_idx, mol_features)
     val_features = get_split_features(val_idx, mol_features)
     test_features = get_split_features(test_idx, mol_features)
 
     # Get properties for each split from the original dataframe
     train_df = df.iloc[train_mol_idx]
+    train_a_df = df.iloc[train_a_mol_idx]
+    train_b_df = df.iloc[train_b_mol_idx]
     val_df = df.iloc[val_mol_idx]
     test_df = df.iloc[test_mol_idx]
 
@@ -331,6 +343,14 @@ if __name__ == "__main__":
     train_bond_counts = get_split_bond_counts(
         train_features['bond_types'], 
         train_features['atom_types']
+    )
+    train_a_bond_counts = get_split_bond_counts(
+        train_a_features['bond_types'], 
+        train_a_features['atom_types']
+    )
+    train_b_bond_counts = get_split_bond_counts(
+        train_b_features['bond_types'], 
+        train_b_features['atom_types']
     )
     val_bond_counts = get_split_bond_counts(
         val_features['bond_types'], 
@@ -342,12 +362,12 @@ if __name__ == "__main__":
     )
 
 
-    split_names = ['train_data', 'val_data', 'test_data']
+    split_names = ['train_data', 'train_a_data', 'train_b_data', 'val_data', 'test_data']
     for split_features, split_df, split_name, split_bond_counts in zip(
-        [train_features, val_features, test_features],
-        [train_df, val_df, test_df],
+        [train_features, train_a_features, train_b_features, val_features, test_features],
+        [train_df, train_a_df, train_b_df, val_df, test_df],
         split_names,
-        [train_bond_counts, val_bond_counts, test_bond_counts]
+        [train_bond_counts, train_a_bond_counts, train_b_bond_counts, val_bond_counts, test_bond_counts]
     ):
         process_split(split_features, split_df, split_name, split_bond_counts, dataset_config)
 
