@@ -1,6 +1,8 @@
 # PropMolFlow: Property-guided Molecule Generation with Geometry-Complete Flow Matching
 [![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg?style=flat)](https://arxiv.org/abs/2505.21469)
 
+Code for the paper: [*"PropMolFlow: Property-guided Molecule Generation with Geometry-Complete Flow Matching"*](https://arxiv.org/abs/2505.21469)
+
 ![Image](figure/overview_page.jpg)
 
 ## Environment Setup
@@ -32,7 +34,7 @@ wget https://zenodo.org/uploads/15700961/files/all_fixed_gdb9.zip
 unzip all_fixed_gdb9.zip
 rm all_fixed_gdb9.zip
 ```
-After downloading, move the all_fixed_gdb9.sdf file to the `data/qm9_raw/` directory:
+After downloading, move the **all_fixed_gdb9.sdf** file to the `data/qm9_raw/` directory:
 ```bash
 mv all_fixed_gdb9.sdf data/qm9_raw/
 ```
@@ -61,18 +63,83 @@ There is **no need to download** them separately.
 ## Demo
 ### Sampling (Generate new property-conditional 3D molecules)
 
-#### In-distrubtion sampling (sampling by giving one certain value)
+#### In-distribution sampling (samling with many properties values while these values are sampled based on properties distribution)
 ```bash
 # alpha
-python sample_condition.py --model_checkpoint "$MODEL_CHECKPOINT" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --properties_for_sampling 41.2 --number_of_atoms "/blue/mingjieliu/jiruijin/diffusion/FlowMol_active/sampling_result/ood_n_atoms_cv_up.npy" \
-  --property_name "cv" \
-  --normalization_file_path "/blue/mingjieliu/jiruijin/diffusion/FlowMol/data/qm9/train_data_property_normalization.pt" \
-  --output_file "$OUT_DIR/cv.sdf" \
-  --analyze
+python sample_condition.py --model_checkpoint "$MODEL_CHECKPOINT" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_alpha.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_alpha.npy" --property_name "alpha" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/alpha.sdf" --analyze
+
+# cv
+python sample_condition.py --model_checkpoint "$MODEL_CHECKPOINT" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_cv.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_cv.npy" --property_name "cv" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/cv.sdf" --analyze
+
+# gap
+python sample_condition.py --model_checkpoint "$MODEL_CHECKPOINT" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_gap.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_gap.npy" --property_name "gap" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/gap.sdf" --analyze
+
+# homo
+python sample_condition.py --model_checkpoint "$MODEL_CHECKPOINT" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_homo.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_homo.npy" --property_name "homo" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/homo.sdf" --analyze
+
+# lumo
+python sample_condition.py --model_checkpoint "$MODEL_CHECKPOINT" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_lumo.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_lumo.npy" --property_name "lumo" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/lumo.sdf" --analyze
+
+# mu
+python sample_condition.py --model_checkpoint "$MODEL_CHECKPOINT" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_mu.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_mu.npy" --property_name "mu" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/mu.sdf" --analyze
 ```
 
+#### Out-of-distribution sampling (sampling by giving a certain value of property)
+```bash
+# alpha
+python sample_condition.py --model_checkpoint "$MODEL_CHECKPOINT" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --properties_for_sampling 93.3 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_alpha_up.npy" --property_name "alpha" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/alpha.sdf" --analyze
+
+# cv
+python sample_condition.py --model_checkpoint "$MODEL_CHECKPOINT" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --properties_for_sampling 41.2 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_cv_up.npy" --property_name "cv" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/cv.sdf" --analyze
+
+# gap
+python sample_condition.py --model_checkpoint "$MODEL_CHECKPOINT" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --properties_for_sampling 0.344 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_gap_up.npy" --property_name "gap" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/gap.sdf" --analyze
+
+# homo
+python sample_condition.py --model_checkpoint "$MODEL_CHECKPOINT" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --properties_for_sampling=-0.1757 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_homo_up.npy" --property_name "homo" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/homo.sdf" --analyze
+
+# lumo
+python sample_condition.py --model_checkpoint "$MODEL_CHECKPOINT" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --properties_for_sampling 0.091 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_lumo_up.npy" --property_name "lumo" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/lumo.sdf" --analyze
+
+# mu
+python sample_condition.py --model_checkpoint "$MODEL_CHECKPOINT" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --properties_for_sampling 6.74 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_mu_up.npy" --property_name "mu" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/mu.sdf" --analyze
+```
+
+#### Sampling Arguments Explanation
+
+- **model_checkpoint**: Path to the trained model checkpoint.
+- **n_mols**: Number of molecules to generate.
+- **max_batch_size**: Batch size used during sampling.
+- **n_timesteps**: Number of integration steps for the ODE solver.
+- **properties_handle_method**: Method for incorporating property values into the model.  
+  Choices: `'concatenate'`, `'sum'`, `'multiply'`, `'concatenate_sum'`, `'concatenate_multiply'`.
+- **number_of_atoms**: Since property values are often correlated with the number of atoms  
+  (e.g., molecules with higher heat capacity often contain more atoms),  
+  we will explain how this is handled in a following section.
+- **property_name**: Property to condition on.  
+  Choices: `'alpha'`, `'cv'`, `'gap'`, `'homo'`, `'lumo'`, `'gap'`.  
+  These six properties are selected to allow fair comparison with previous works.
+- **multiple_values_file**: Path to a `.npy` file containing multiple property values  
+  for sampling in **in-distribution** tasks. The model will generate multiple molecules conditioned on diverse values.
+- **properties_for_sampling**: A single target value to use for **out-of-distribution** sampling.  
+  The model will generate multiple molecules conditioned on this single value.
+- **normalization_file_path**: Path to the normalization statistics file.
+- **output_file**: Output directory path to save generated molecules.
+- **analyze**: Whether to analyze the validity and stability of the generated molecules.
+
+
+#### Structure-Property Correlation Generation 
+This section explain how to generate file that need for arguments **number_of_atoms** and **multiple_values_file**.   
+
+### Prediction and Evaluation
+
 ### Training 
-Run the **train.py** script. You can either pass a config file, or pass a trained model checkpoint for resuming.
+**Note**: For training the PropMolFlow model, we need to run following command to process the qm9 dataset first:
+```bash
+python process_qm9_cond.py --config=configs/with_gaussian/alpha_concatenate_multiply.yaml
+```
+
+Then run the **train.py** script. You can either pass a config file, or pass a trained model checkpoint for resuming.
 ```python
 # training from scratch
 python train.py --config=configs/without_gaussian/cv_concatenate_sum.yaml 
