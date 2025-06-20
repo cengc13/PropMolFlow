@@ -320,6 +320,7 @@ if __name__ == "__main__":
     # Get original molecule indices for each split
     train_mol_idx = [valid_mol_idxs[i] for i in train_idx]
     train_a_mol_idx = [valid_mol_idxs[i] for i in train_a_idx]
+    # save indices for train_a for check distribution
     np.save(Path(dataset_config['raw_data_dir']) / 'train_mol_idxs.npy', train_a_mol_idx)
     train_b_mol_idx = [valid_mol_idxs[i] for i in train_b_idx]
     val_mol_idx = [valid_mol_idxs[i] for i in val_idx]
