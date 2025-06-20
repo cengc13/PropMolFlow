@@ -129,9 +129,32 @@ python sample_condition.py --model_checkpoint "$MODEL_CHECKPOINT" --n_mols 1000 
 
 
 #### Structure-Property Correlation Generation 
-This section explain how to generate file that need for arguments **number_of_atoms** and **multiple_values_file**.   
+This section explains how to generate the files required for the **number_of_atoms** and **multiple_values_file** arguments.
+
+To generate these files, run:
+```bash
+python str2prop_sampler.py
+```
+If you want to customize the number of molecular properties generated or change the output path,
+please refer to the configurable arguments inside **str2prop_sampler.py**. 
 
 ### Prediction and Evaluation
+After sampling, we use a pre-trained regressor to predict molecular properties and evaluate the results  
+by comparing the **Mean Absolute Error (MAE)** between the input values and the predicted values.  
+The prediction results will be saved in the `prediction_result/` directory.
+
+To run **in-distribution** prediction and calculate MAE, use the following command:
+```bash
+# this is for in-distribution prediction and calculate MAE values
+python propmolflow/property_regressor/test_regressor.py --checkpoint=propmolflow/property_regressor/model_output/alpha/checkpoints/gvp-regressor-epoch=358-val_loss=0.0061.ckpt --config=propmolflow/property_regressor/configs/test.yaml --input=sample_result/example_alpha.sdf --output=example_case.pt --properties_values=in_distribution_sampling/train_half_sampled_no_atoms_alpha.npy --property_name=alpha
+```
+**Note**: For **out-of-distribution** prediction, we do not provide a built-in function to compute the MAE,
+but it is straightforward to calculate from the predicted results.
+To perform out-of-distribution prediction, simply omit the `--properties_values` argument:
+ ```bash 
+python propmolflow/property_regressor/test_regressor.py --checkpoint=propmolflow/property_regressor/model_output/alpha/checkpoints/gvp-regressor-epoch=358-val_loss=0.0061.ckpt --config=propmolflow/property_regressor/configs/test.yaml --input=sample_result/example_alpha.sdf --output=example_case.pt --property_name=alpha
+```
+
 
 ### Training 
 **Note**: For training the PropMolFlow model, we need to run following command to process the qm9 dataset first:

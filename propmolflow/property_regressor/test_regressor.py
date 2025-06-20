@@ -8,6 +8,7 @@ import dgl
 from typing import List, Union
 from tqdm import tqdm
 import numpy as np
+import os
 
 from propmolflow.data_processing.geom import MoleculeFeaturizer
 from propmolflow.property_regressor.train_regressor import GVPRegressorModule
@@ -208,6 +209,7 @@ def main():
     parser.add_argument('--checkpoint', type=str, required=True, help='Path to model checkpoint')
     parser.add_argument('--config', type=str, required=True, help='Path to config file')
     parser.add_argument('--input', type=str, required=True, help='Path to input file (SDF) or directory of XYZ files')
+    parser.add_argument('--output', type=str, required=True, help='Name of output file')
     parser.add_argument('--properties_values', type=str, help='Path to properties numpy file containing true values')
     parser.add_argument('--property_name', type=str, help='Name of property to predict')
     args = parser.parse_args()
@@ -240,6 +242,9 @@ def main():
         # 'successful_indices': predictor.successful_indices,
         'property_name': args.property_name, 
     }
+    os.makdirs("prediction_result", exist_ok=True)
+    output_path = Path("prediction_result") / args.output
+    torch.save(results, output_path)
 
     if filtered_properties is not None:
         mae = calculate_mae(filtered_properties, results['predictions'])
