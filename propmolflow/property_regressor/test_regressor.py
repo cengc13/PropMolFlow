@@ -49,7 +49,7 @@ class MoleculePredictor:
         else:
             self.norm_params = None
 
-    def process_sdf(self, sdf_path: str, properties:List[float]|List[int] = None) -> tuple:
+    def process_sdf(self, sdf_path: str, properties=None) -> tuple:
         """Process molecules from an SDF file"""
         mol_supplier = Chem.SDMolSupplier(sdf_path, removeHs=False, sanitize=True)
         graphs = []
@@ -65,12 +65,14 @@ class MoleculePredictor:
         
         # Filter properties if provided
         filtered_properties = None
-        if properties is not None:
+        if properties is not None and isinstance(properties, (list, np.ndarray)):
             filtered_properties = [properties[idx] for idx in self.successful_indices]
+        elif properties is not None and isinstance(properties, (float, int)):
+            filtered_properties = [properties] * len(graphs)
                 
         return graphs, filtered_properties
 
-    def process_xyz_files(self, xyz_paths: List[str], properties:List[float]|List[int] = None) -> tuple:
+    def process_xyz_files(self, xyz_paths: List[str], properties=None) -> tuple:
         """Process molecules from XYZ files"""
         graphs = []
         self.successful_indices = []  # Reset successful indices
@@ -102,9 +104,11 @@ class MoleculePredictor:
                 
         # Filter properties if provided
         filtered_properties = None
-        if properties is not None:
+        if properties is not None and isinstance(properties, (list, np.ndarray)):
             filtered_properties = [properties[idx] for idx in self.successful_indices]
-                
+        elif properties is not None and isinstance(properties, (float, int)):
+            filtered_properties = [properties] * len(graphs)
+
         return graphs, filtered_properties
 
     def _mol_to_graph(self, mol) -> Union[dgl.DGLGraph, None]:
@@ -139,8 +143,8 @@ class MoleculePredictor:
             edge_labels = torch.cat((upper_edge_labels, upper_edge_labels))
 
             # One-hot encode edge labels and atom charges
-            edge_labels = torch.nn.functional.one_hot(edge_labels.to(torch.int64), num_classes=5).to(torch.float32)
-            atom_charges = torch.nn.functional.one_hot(atom_charges + 2, num_classes=6).to(torch.float32)
+            edge_labels = torch.nn.functional.one_hot(edge_labels.to(torch.int64), num_classes=5).to(torch.float32) # hard-coded assumption of 5 bond types
+            atom_charges = torch.nn.functional.one_hot(atom_charges + 2, num_classes=6).to(torch.float32) # hard-coded assumption that charges are in range [-2, 3]
 
             # Create DGL graph
             g = dgl.graph((edges[0], edges[1]), num_nodes=n_atoms)
@@ -204,13 +208,19 @@ def calculate_mae(true_values, predicted_values):
     mae = np.mean(np.abs(true_values - predicted_values))
     return mae
 
+def str_or_float(value):
+    try:
+        return float(value)
+    except ValueError:
+        return value  # return as string if it can't be converted to float
+
 def main():
     parser = argparse.ArgumentParser(description='Predict properties for molecules')
     parser.add_argument('--checkpoint', type=str, required=True, help='Path to model checkpoint')
     parser.add_argument('--config', type=str, required=True, help='Path to config file')
     parser.add_argument('--input', type=str, required=True, help='Path to input file (SDF) or directory of XYZ files')
     parser.add_argument('--output', type=str, required=True, help='Name of output file')
-    parser.add_argument('--properties_values', type=str, help='Path to properties numpy file containing true values')
+    parser.add_argument('--properties_values', type=str_or_float, default=None, help='Either a path to a numpy file containing property values or a single value to use for all predictions')
     parser.add_argument('--property_name', type=str, help='Name of property to predict')
     args = parser.parse_args()
 
@@ -219,7 +229,7 @@ def main():
 
     # Load properties if provided
     properties = None
-    if args.properties_values:
+    if args.properties_values and isinstance(args.properties_values, str):
         properties = np.load(args.properties_values).tolist()
 
     # Process input files

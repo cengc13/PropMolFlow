@@ -1,0 +1,7 @@
+property_name,prop_emb,epoch,mae,with_gaussian
+alpha,sum,epoch1845,1.311539358,FALSE
+cv,sum,epoch1735,0.62587751,FALSE
+gap,concatenate_sum,epoch1867,390.9819036,FALSE
+homo,concatenate,epoch1927,253.9890516,FALSE
+lumo,concatenate_sum,epoch1930,314.5164381,FALSE
+mu,multiply,epoch1868,0.620187259,FALSE
