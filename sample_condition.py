@@ -33,19 +33,12 @@ def parse_arguments():
                         help="Number of atoms per molecule (if fixed)")
     parser.add_argument("--n_timesteps", type=int, default=100,
                         help="Number of timesteps for sampling")
-    parser.add_argument("--method", type=str, default="euler",
-                        choices=["euler", "midpoint"],
-                        help="Integration method")
     
     # Trajectory and metrics options
     parser.add_argument("--xt_traj", action="store_true",
                         help="Store x_t trajectory")
     parser.add_argument("--ep_traj", action="store_true",
                         help="Store episode trajectory")
-    parser.add_argument("--metrics", action="store_true",
-                        help="Compute metrics")
-    parser.add_argument("--baseline_comparison", action="store_true",
-                        help="Compare with baseline")
     
     # Stochasticity and thresholds
     parser.add_argument("--stochasticity", type=float, default=None,
@@ -58,8 +51,6 @@ def parse_arguments():
                         help="Property value for conditioning")
     parser.add_argument("--training_mode", action="store_true",
                         help="Use training mode")
-    parser.add_argument("--conditional_generation", action="store_true",
-                        help="Enable conditional generation")
     parser.add_argument("--property_name", type=str, default=None,
                         help="Property name")
     parser.add_argument("--normalization_file_path", type=str, default=None,
@@ -128,7 +119,7 @@ def main():
             batch_property = multilple_values_to_one_property[len(molecules): len(molecules) + batch_size]
         if number_of_atoms is not None:
             batch_no_of_atoms = number_of_atoms[len(molecules): len(molecules) + batch_size]
-        
+
         # Sample molecules
         if args.n_atoms_per_mol is None:
             batch_molecules = model.sample_random_sizes(
@@ -141,7 +132,6 @@ def main():
                 high_confidence_threshold=args.hc_thresh,
                 properties_for_sampling=args.properties_for_sampling,
                 training_mode=args.training_mode,
-                conditional_generation=args.conditional_generation,
                 property_name=args.property_name,
                 normalization_file_path=args.normalization_file_path,
                 properties_handle_method=args.properties_handle_method,
@@ -160,7 +150,6 @@ def main():
                 high_confidence_threshold=args.hc_thresh,
                 properties_for_sampling=args.properties_for_sampling,
                 training_mode=args.training_mode,
-                conditional_generation=args.conditional_generation,
                 property_name=args.property_name,
                 normalization_file_path=args.normalization_file_path,
                 properties_handle_method=args.properties_handle_method,

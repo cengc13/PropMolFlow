@@ -26,7 +26,7 @@ bond_dict = [None, Chem.rdchem.BondType.SINGLE, Chem.rdchem.BondType.DOUBLE, Che
 
 class SampleAnalyzer():
 
-    def __init__(self, processed_data_dir: str = None, dataset='geom'):
+    def __init__(self, processed_data_dir: str = None, dataset='qm9'):
 
         self.processed_data_dir = processed_data_dir
 

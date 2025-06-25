@@ -30,7 +30,7 @@ We provide a corrected version of the QM9 SDF file originally from [DeepChem](ht
 
 To download the fixed SDF file, run:
 ```bash
-wget https://zenodo.org/uploads/15700961/files/all_fixed_gdb9.zip
+wget https://zenodo.org/records/15700961/files/all_fixed_gdb9.zip
 unzip all_fixed_gdb9.zip
 rm all_fixed_gdb9.zip
 ```
@@ -50,7 +50,7 @@ covering both **in-distribution** and **out-of-distribution** tasks.
 
 To download and extract them, run:
 ```bash
-wget https://zenodo.org/uploads/15700961/files/checkpoints.tar
+wget https://zenodo.org/records/15700961/files/checkpoints.tar
 tar -xvf checkpoints.tar
 rm checkpoints.tar
 ```
@@ -68,11 +68,11 @@ The full benchmark results can be found in:
 
 To download the complete set of checkpoints, run:
 ```bash
-wget https://zenodo.org/uploads/15700961/files/with_gaussian.tar
+wget https://zenodo.org/records/15700961/files/with_gaussian.tar
 tar -xvf with_gaussian.tar
 rm with_gaussian.tar
 
-wget https://zenodo.org/uploads/15700961/files/without_gaussian.tar
+wget https://zenodo.org/records/15700961/files/without_gaussian.tar
 tar -xvf without_gaussian.tar
 rm without_gaussian.tar
 ```
@@ -91,43 +91,43 @@ There is **no need to download** them separately.
 #### In-distribution sampling (samling with many properties values while these values are sampled based on properties distribution)
 ```bash
 # alpha
-python sample_condition.py --model_checkpoint "checkpoints/in-distribution/alpha/epoch=1845-step=721785.ckpt" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_alpha.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_alpha.npy" --property_name "alpha" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/alpha.sdf" --analyze
+python sample_condition.py --model_checkpoint "checkpoints/in-distribution/alpha/epoch=1845-step=721785.ckpt" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_alpha.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_alpha.npy" --property_name "alpha" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sample_result/alpha.sdf" --analyze
 
 # cv
-python sample_condition.py --model_checkpoint "checkpoints/in-distribution/cv/epoch=1735-step=678541.ckpt" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_cv.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_cv.npy" --property_name "cv" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/cv.sdf" --analyze
+python sample_condition.py --model_checkpoint "checkpoints/in-distribution/cv/epoch=1735-step=678541.ckpt" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_cv.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_cv.npy" --property_name "cv" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sample_result/cv.sdf" --analyze
 
 # gap
-python sample_condition.py --model_checkpoint "checkpoints/in-distribution/gap/epoch=1867-step=730387.ckpt" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_gap.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_gap.npy" --property_name "gap" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/gap.sdf" --analyze
+python sample_condition.py --model_checkpoint "checkpoints/in-distribution/gap/epoch=1867-step=730387.ckpt" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_gap.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_gap.npy" --property_name "gap" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sample_result/gap.sdf" --analyze
 
 # homo
-python sample_condition.py --model_checkpoint "checkpoints/in-distribution/homo/epoch=1927-step=753691.ckpt" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_homo.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_homo.npy" --property_name "homo" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/homo.sdf" --analyze
+python sample_condition.py --model_checkpoint "checkpoints/in-distribution/homo/epoch=1927-step=753691.ckpt" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_homo.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_homo.npy" --property_name "homo" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sample_result/homo.sdf" --analyze
 
 # lumo
-python sample_condition.py --model_checkpoint "checkpoints/in-distribution/lumo/epoch=1930-step=754942.ckpt" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_lumo.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_lumo.npy" --property_name "lumo" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/lumo.sdf" --analyze
+python sample_condition.py --model_checkpoint "checkpoints/in-distribution/lumo/epoch=1930-step=754942.ckpt" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_lumo.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_lumo.npy" --property_name "lumo" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sample_result/lumo.sdf" --analyze
 
 # mu
-python sample_condition.py --model_checkpoint "checkpoints/in-distribution/mu/epoch=1868-step=730778.ckpt" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "multiply" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_mu.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_mu.npy" --property_name "mu" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/mu.sdf" --analyze
+python sample_condition.py --model_checkpoint "checkpoints/in-distribution/mu/epoch=1868-step=730778.ckpt" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "multiply" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_mu.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_mu.npy" --property_name "mu" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sample_result/mu.sdf" --analyze
 ```
 
 #### Out-of-distribution sampling (sampling by giving a certain value of property)
 ```bash
 # alpha
-python sample_condition.py --model_checkpoint "checkpoints/out-of-distribution/alpha/epoch=1845-step=721785.ckpt" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "sum" --properties_for_sampling 93.3 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_alpha_up.npy" --property_name "alpha" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/alpha.sdf" --analyze
+python sample_condition.py --model_checkpoint "checkpoints/out-of-distribution/alpha/epoch=1845-step=721785.ckpt" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "sum" --properties_for_sampling 93.3 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_alpha_up.npy" --property_name "alpha" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sample_result/alpha.sdf" --analyze
 
 # cv
-python sample_condition.py --model_checkpoint "checkpoints/out-of-distribution/cv/epoch=1735-step=678541.ckpt" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "sum" --properties_for_sampling 41.2 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_cv_up.npy" --property_name "cv" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/cv.sdf" --analyze
+python sample_condition.py --model_checkpoint "checkpoints/out-of-distribution/cv/epoch=1735-step=678541.ckpt" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "sum" --properties_for_sampling 41.2 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_cv_up.npy" --property_name "cv" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sample_result/cv.sdf" --analyze
 
 # gap
-python sample_condition.py --model_checkpoint "checkpoints/out-of-distribution/gap/epoch=1637-step=640223.ckpt" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate" --properties_for_sampling 0.344 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_gap_up.npy" --property_name "gap" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/gap.sdf" --analyze
+python sample_condition.py --model_checkpoint "checkpoints/out-of-distribution/gap/epoch=1637-step=640223.ckpt" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate" --properties_for_sampling 0.344 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_gap_up.npy" --property_name "gap" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sample_result/gap.sdf" --analyze
 
 # homo
-python sample_condition.py --model_checkpoint "checkpoints/out-of-distribution/homo/epoch=1468-step=574066.ckpt" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --properties_for_sampling=-0.1757 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_homo_up.npy" --property_name "homo" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/homo.sdf" --analyze
+python sample_condition.py --model_checkpoint "checkpoints/out-of-distribution/homo/epoch=1468-step=574066.ckpt" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_sum" --properties_for_sampling=-0.1757 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_homo_up.npy" --property_name "homo" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sample_result/homo.sdf" --analyze
 
 # lumo
-python sample_condition.py --model_checkpoint "checkpoints/out-of-distribution/lumo/epoch=1865-step=729605.ckpt" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_multiply" --properties_for_sampling 0.091 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_lumo_up.npy" --property_name "lumo" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/lumo.sdf" --analyze
+python sample_condition.py --model_checkpoint "checkpoints/out-of-distribution/lumo/epoch=1865-step=729605.ckpt" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "concatenate_multiply" --properties_for_sampling 0.091 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_lumo_up.npy" --property_name "lumo" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sample_result/lumo.sdf" --analyze
 
 # mu
-python sample_condition.py --model_checkpoint "checkpoints/out-of-distribution/mu/epoch=1883-step=736409.ckpt" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "sum" --properties_for_sampling 6.74 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_mu_up.npy" --property_name "mu" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sampling_result/mu.sdf" --analyze
+python sample_condition.py --model_checkpoint "checkpoints/out-of-distribution/mu/epoch=1883-step=736409.ckpt" --n_mols 1000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "sum" --properties_for_sampling 6.74 --number_of_atoms "out_of_distribution_sampling/ood_n_atoms_mu_up.npy" --property_name "mu" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sample_result/mu.sdf" --analyze
 ```
 
 #### Sampling Arguments Explanation
