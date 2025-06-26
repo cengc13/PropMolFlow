@@ -23,7 +23,7 @@ def numpy_file_for_in_and_out_distribution_task(n_samples_outdis:int=1000,
     qm9_csv_file = "data/qm9_raw/gdb9.sdf.csv"
     df = pd.read_csv(qm9_csv_file)
     df['no_atoms'] = no_atoms
-    train_df = df.iloc[train_inds]
+    train_df = df.iloc[train_ind]
 
     stats = lambda x: np.quantile(x, q=[0.5, 0.97, 0.99, 1])
     train_half_no_atoms = train_df.loc[:, 'no_atoms'].values

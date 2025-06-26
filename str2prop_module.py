@@ -328,7 +328,7 @@ def sample_n_atoms(property_values, n_atoms_list, property_range, n_samples=1, r
     # Find indices where property is within the desired range
     mask = (property_values >= low_property) & (property_values <= high_property) 
     matching_n_atoms = n_atoms_list[mask]
-    print(mask.sum())
+    # print(mask.sum())
     if len(matching_n_atoms) == 0:
         raise ValueError(f"No matching property values found within {tolerance} of {property_range}.")
     
