@@ -3,6 +3,7 @@ import pandas as pd
 import pickle
 import json
 import argparse
+import os
 from rdkit import Chem
 from str2prop_module import SimplePropertySampler, sample_n_atoms
 
@@ -13,7 +14,6 @@ def numpy_file_for_in_and_out_distribution_task(n_samples_outdis:int=1000,
                                                 seed:int=42, 
                                                 output_dir_outdis:str="out_of_distribution_sampling",
                                                 output_dir_indis:str="in_distribution_sampling"):
-
     # "train_mol_idxs.npy" can be got by running "process_qm9_cond.py"
     #  which is also need to be run before training the model
     train_ind = np.load("data/qm9_raw/train_mol_idxs.npy")
@@ -29,6 +29,9 @@ def numpy_file_for_in_and_out_distribution_task(n_samples_outdis:int=1000,
     train_half_no_atoms = train_df.loc[:, 'no_atoms'].values
     # chosen_target_values tell what values are used for out-of-distribution task
     chosen_target_values = {}
+    os.makedirs(output_dir_outdis, exist_ok=True)
+    os.makedirs(output_dir_indis, exist_ok=True)
+
     for prop in PROPERTY_NAMES:
         prop_values = train_df.loc[:, prop].values
         # for out-of-distribution task
