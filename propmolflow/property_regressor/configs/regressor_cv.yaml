@@ -1,6 +1,6 @@
 dataset:
   dataset_name: qm9
-  processed_data_dir: /blue/mingjieliu/jiruijin/diffusion/FlowMol/data/qm9 # absolute path
+  processed_data_dir: data/qm9 
   conditioning:
     enabled: true
     property: cv  # Property to predict
@@ -14,7 +14,7 @@ model:
   dropout: 0.0
   pooling_type: mean
 training:
-  output_dir: model_output
+  output_dir: propmolflow/property_regressor/model_output
   batch_size: 128
   num_workers: 4
   learning_rate: 1.0e-3

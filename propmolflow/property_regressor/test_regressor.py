@@ -249,10 +249,9 @@ def main():
     # Save results
     results = {
         'predictions': predictions.numpy(),
-        # 'successful_indices': predictor.successful_indices,
         'property_name': args.property_name, 
     }
-    os.makdirs("prediction_result", exist_ok=True)
+    os.makedirs("prediction_result", exist_ok=True)
     output_path = Path("prediction_result") / args.output
     torch.save(results, output_path)
 

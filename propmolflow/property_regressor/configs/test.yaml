@@ -5,7 +5,7 @@ dataset:
   - N
   - O
   - F
-  processed_data_dir: /blue/mingjieliu/jiruijin/diffusion/FlowMol/data/qm9
+  processed_data_dir: data/qm9
 mol_fm:
   parameterization: ctmc
   prior_config:
