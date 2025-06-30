@@ -1,4 +1,4 @@
-name: propflowmol
+name: propmolflow
 channels:
   - pytorch
   - nvidia
