@@ -83,10 +83,11 @@ rm without_gaussian.tar
 Instead, we employ **Geometric Vector Perceptrons (GVP)** as the backbone GNN model of PropMolFlow for the property regressor.
 
 The pre-trained checkpoints are already included in the repository under:  
-`propmolflow/property_regressor/model_output`  
+`propmolflow/property_regressor/model_output` 
+
 There is **no need to download** them separately.
 
-**Note:** For train a GVP regressor by yourself, please run:
+**Note:** To train a GVP regressor yourself, please run:
 ```bash
 python propmolflow/property_regressor/train_regressor.py --config=propmolflow/property_regressor/configs/regressor_alpha.yaml 
 ```
@@ -171,8 +172,8 @@ If you want to customize the number of molecular properties generated or change 
 please refer to the configurable arguments inside **str2prop_sampler.py**. 
 
 ### Prediction and Evaluation
-After sampling, we use a pre-trained regressor to predict molecular properties and evaluate the results  
-by comparing the **MAE** between the input values and the predicted values.  
+After sampling, we use a pre-trained regressor as detailed in **Regressor Checkpoints** section to predict molecular properties and evaluate the results by comparing the **MAE** between the input values and the predicted values.  
+
 The prediction results will be saved in the `prediction_result/` directory.
 
 To run **in-distribution** prediction and calculate MAE, use the following command:
