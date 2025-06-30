@@ -46,7 +46,7 @@ As for csv file contains properties values, it is provided in `data/qm9_raw` dir
 ## Download Checkpoints
 
 ### PropMolFlow Checkpoints
-**Note:** We provide **12 model checkpoints** with the **lowest Mean Absolute Error (MAE) values** for **6 molecular properties**, covering both **in-distribution** and **out-of-distribution** tasks. 
+**Note:** We provide **12 model checkpoints** with the **lowest Mean Absolute Error (MAE) values** for **6 molecular properties** by regressor prediction, covering both **in-distribution** and **out-of-distribution** tasks. 
 
 To download and extract them, run:
 ```bash
