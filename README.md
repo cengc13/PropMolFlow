@@ -95,7 +95,7 @@ The trained model will saved in path `propmolflow/property_regressor/model_outpu
 ## Demo
 ### Sampling (Generate new property-conditional 3D molecules)
 
-#### In-distribution sampling (samling with many properties values while these values are sampled based on properties distribution)
+#### In-distribution sampling (sampling with diverse properties values while these values are drawn from the distribution of each property)
 ```bash
 # alpha
 python sample_condition.py --model_checkpoint "checkpoints/in-distribution/alpha/epoch=1845-step=721785.ckpt" --n_mols 10000 --max_batch_size 128 --n_timesteps 100 --properties_handle_method "sum" --multilple_values_file "in_distribution_sampling/train_half_sampled_values_alpha.npy" --number_of_atoms "in_distribution_sampling/train_half_sampled_no_atoms_alpha.npy" --property_name "alpha" --normalization_file_path "data/qm9/train_data_property_normalization.pt" --output_file "sample_result/alpha_out.sdf" --analyze
