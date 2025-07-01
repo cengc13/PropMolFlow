@@ -231,6 +231,8 @@ def main():
     properties = None
     if args.properties_values and isinstance(args.properties_values, str):
         properties = np.load(args.properties_values).tolist()
+    elif args.properties_values and isinstance(args.properties_values, (float, int)):
+        properties = args.properties_values        
 
     # Process input files
     input_path = Path(args.input)
