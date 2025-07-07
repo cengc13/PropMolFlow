@@ -3,7 +3,7 @@ from pathlib import Path
 import torch
 import yaml
 from rdkit import Chem
-import ase.io
+# import ase.io  # only install ase if need to use xyz file as input
 import dgl
 from typing import List, Union
 from tqdm import tqdm
