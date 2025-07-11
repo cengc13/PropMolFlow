@@ -29,7 +29,7 @@ pip install -e .
 ### QM9 SDF File
 We provide a corrected version of the QM9 SDF file originally from [DeepChem](https://github.com/deepchem/deepchem), fixing issues such as **invalid bond orders** and **non-zero net charges** in approximately **30,000 molecules**.
 
-To download the fixed SDF file, run:
+To download the revised SDF file, run:
 ```bash
 wget https://zenodo.org/records/15700961/files/all_fixed_gdb9.zip
 unzip all_fixed_gdb9.zip
@@ -39,6 +39,7 @@ After downloading, move the **all_fixed_gdb9.sdf** file to the `data/qm9_raw/` d
 ```bash
 mv all_fixed_gdb9.sdf data/qm9_raw/
 ```
+The revised SDF file is also hosted at our HuggingFace [ColabFit rQM9](https://huggingface.co/datasets/colabfit/rQM9).
 
 ### CSV File for Properties
 As for csv file contains properties values, it is provided in `data/qm9_raw` directory. 
@@ -90,7 +91,7 @@ There is **no need to download** them separately.
 ```bash
 python propmolflow/property_regressor/train_regressor.py --config=propmolflow/property_regressor/configs/regressor_alpha.yaml 
 ```
-The trained model will saved in path `propmolflow/property_regressor/model_output`.
+The trained model will be saved in path `propmolflow/property_regressor/model_output`.
 
 ## Demo
 ### Sampling (Generate new property-conditional 3D molecules)
