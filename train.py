@@ -1,22 +1,17 @@
 import argparse
 from pathlib import Path
 import yaml
-import dgl
-from torch.utils.data import DataLoader
 import pytorch_lightning as pl
-from pytorch_lightning.callbacks import LearningRateMonitor, TQDMProgressBar
-from pytorch_lightning import seed_everything
+from pytorch_lightning.callbacks import TQDMProgressBar
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.utilities import rank_zero_only
 import wandb
-import dgl
-import sys
 
 # from models.ligand_edm import LigandEquivariantDiffusion
-from flowmol.models.flowmol import FlowMol
-from flowmol.data_processing.data_module import MoleculeDataModule
-from flowmol.model_utils.sweep_config import merge_config_and_args, register_hyperparameter_args
-from flowmol.model_utils.load import read_config_file, model_from_config, data_module_from_config
+from propmolflow.models.flowmol import FlowMol
+from propmolflow.data_processing.data_module import MoleculeDataModule
+from propmolflow.model_utils.sweep_config import merge_config_and_args, register_hyperparameter_args
+from propmolflow.model_utils.load import read_config_file, model_from_config, data_module_from_config
 
 def parse_args():
     p = argparse.ArgumentParser(description='Training Script')
@@ -45,7 +40,6 @@ if __name__ == "__main__":
 
     wandb.init(project="mol-fm")
 
-    # TODO: implement resuming
     if args.resume is not None:
         # determine if we are resuming from a run directory or a checkpoint file
         if args.resume.is_dir():
@@ -58,8 +52,6 @@ if __name__ == "__main__":
             ckpt_file = str(args.resume)
         else:
             raise ValueError('resume argument must be a run directory or a checkpoint file that must already exist')
-        
-        # config_file = run_dir / 'config.yaml'
     else:
         # config_file = args.config
         ckpt_file = None
