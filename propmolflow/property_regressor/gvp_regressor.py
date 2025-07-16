@@ -27,6 +27,7 @@ class GVPRegressor(nn.Module):
                  pooling_type: str = 'mean',
                  convs_per_update: int = 2,
                  update_positions: bool = True,
+                 n_atom_types: int = 5,
                 ):
         super(GVPRegressor, self).__init__()
         
@@ -68,7 +69,6 @@ class GVPRegressor(nn.Module):
             ])
 
         # Node feature embeddings
-        n_atom_types = 5  # From dataset.py 5(atom type)
         self.scalar_embedding = nn.Sequential(
             nn.Linear(n_atom_types, scalar_size),
             nn.SiLU(),
