@@ -1,5 +1,4 @@
 import pytorch_lightning as pl
-import torch
 import torch.nn as nn
 from torch.optim import Adam
 from torch.optim.lr_scheduler import ReduceLROnPlateau
@@ -14,7 +13,10 @@ from propmolflow.property_regressor.gvp_regressor import GVPRegressor
 from propmolflow.model_utils.load import data_module_from_config
 
 class GVPRegressorModule(pl.LightningModule):
-    """PyTorch Lightning module for training GVP Regressor"""
+    """PyTorch Lightning module for training GVP Regressor
+    `learning_rate`, `weight_decay`, `scheduler_patience`, and `scheduler_factor` are needed for
+    `pl.LightningModule`.
+    """
     
     def __init__(
         self,
@@ -99,7 +101,6 @@ class GVPRegressorModule(pl.LightningModule):
             mode='min',
             factor=self.hparams.scheduler_factor,
             patience=self.hparams.scheduler_patience,
-            verbose=True
         )
         
         return {
@@ -174,15 +175,9 @@ def train_gvp_regressor(config_path: Optional[str] = None, checkpoint_path: Opti
                 monitor='val_loss',
                 mode='min',
                 save_top_k=3,
-                save_last=True,  # Also save last checkpoint
+                save_last=True, 
                 filename='gvp-regressor-{epoch:02d}-{val_loss:.4f}'
             ),
-            # pl.callbacks.EarlyStopping(
-            #     monitor='val_loss',
-            #     mode='min',
-            #     patience=20,
-            #     verbose=True
-            # ),
             pl.callbacks.LearningRateMonitor(logging_interval='epoch')
         ],
     )
