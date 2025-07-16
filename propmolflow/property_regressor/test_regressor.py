@@ -51,7 +51,7 @@ class MoleculePredictor:
 
     def process_sdf(self, sdf_path: str, properties=None) -> tuple:
         """Process molecules from an SDF file"""
-        mol_supplier = Chem.SDMolSupplier(sdf_path, removeHs=False, sanitize=True)
+        mol_supplier = Chem.SDMolSupplier(sdf_path, removeHs=False, sanitize=False)
         graphs = []
         self.successful_indices = []  # Reset successful indices
         
