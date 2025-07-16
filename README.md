@@ -6,21 +6,20 @@ Code for the paper: [*"PropMolFlow: Property-guided Molecule Generation with Geo
 ![Image](figure/overview_page.jpg)
 
 ## Environment Setup
-1. Create a conda environment with python 3.10: `conda create -n propmolflow python=3.10`
-2. Activate the environment: `conda activate propmolflow`
-3. Install the packages required: 
-```python
-conda install mamba
-mamba install pytorch=2.2.0 torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia -y
-mamba install pytorch-cluster=1.6.3 pytorch-scatter=2.1.2=py310_torch_2.2.0_cu121 -c pyg -y
-mamba install -c dglteam/label/cu121 dgl=2.0.0.cu121=py310_0 -y
-mamba install -c conda-forge pytorch-lightning=2.1.3=pyhd8ed1ab_0 -y
-mamba install -c conda-forge pystow einops -y
 
-pip install rdkit==2023.9.4
-pip install numpy==1.26.3
-pip install wandb useful_rdkit_utils py3Dmol --no-input
+Run the following commands in your terminal to set up `propmolflow` (We have tested it on **Nvidia L4 and Blackwell B200** GPUs): 
+```python
+conda install mamba # if you do not have mamba
+mamba create -n propmolflow python=3.12 nvidia/label/cuda-12.8.1::cuda-toolkit
+mamba activate propmolflow
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+pip install torch-cluster torch_scatter torch_sparse -f https://data.pyg.org/whl/torch-2.7.0%2Bcu128.html
+pip install torch-geometric
+mamba install -c dglteam/label/th24_cu124 dgl=2.4.0.th24.cu124
+pip install pytorch-lightning 
+pip install einops rdkit numpy wandb py3Dmol useful_rdkit_utils
 pip install torchtyping
+pip install ase
 pip install -e .
 ```
 
@@ -204,9 +203,9 @@ python train.py --resume=checkpoints/in-distribution/alpha/epoch=1845-step=72178
 ```
 The model checkpoints will be saved in `runs_qm9_valid` folder, you can modify the output dir by changing the **output_dir** argument in the config file.
 
-## How to cite:
+## Cite
 
-If you find this work useful, we would appreciate if you can cite the following paper:
+If you find this work useful, we would appreciate it if you can cite the following paper:
 
 ```bibtex
 @article{zeng2025propmolflow,
