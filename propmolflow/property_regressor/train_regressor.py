@@ -47,11 +47,6 @@ class GVPRegressorModule(pl.LightningModule):
 
     def training_step(self, g: dgl.DGLGraph, batch_idx:int):
         # batch is a batched DGLGraph containing the property values in g.prop
-        # Print device info for debugging (only for first batch)
-        if batch_idx == 0:
-            print(f"Model device: {next(self.parameters()).device}")
-            print(f"Graph device: {g.device}")
-            print(f"Property device: {g.prop.device}")
         pred = self(g)
         pred = pred.squeeze()
         target = g.prop.to(pred.device)
