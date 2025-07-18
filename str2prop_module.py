@@ -234,77 +234,6 @@ class SimplePropertySampler:
         sampled_nodes = sampled_nodes.cpu().numpy()
         
         return sampled_props, sampled_nodes
-    
-
-# visualization
-# import seaborn as sns
-# import matplotlib.pyplot as plt
-
-# def plot_joint_distribution(
-#     n_nodes_train: Union[np.ndarray, torch.Tensor],
-#     prop_values_train: Union[np.ndarray, torch.Tensor],
-#     n_nodes_gen: Union[np.ndarray, torch.Tensor],
-#     prop_values_gen: Union[np.ndarray, torch.Tensor],
-#     property_name: str,
-#     save_path: str
-# ) -> Tuple[plt.Figure, plt.Axes]:
-#     """Create KDE plot comparing training and generated distributions.
-    
-#     Args:
-#         n_nodes_train: Node counts from training data [num_train]
-#         prop_values_train: Property values from training data [num_train] 
-#         n_nodes_gen: Generated node counts [num_samples]
-#         prop_values_gen: Generated property values [num_samples]
-#         property_name: Name of the property being plotted
-#         save_path: Path to save the plot
-        
-#     Returns:
-#         fig: matplotlib figure
-#         ax: matplotlib axes
-#     """
-#     # Convert to numpy if needed
-#     if torch.is_tensor(n_nodes_train):
-#         n_nodes_train = n_nodes_train.cpu().numpy()
-#     if torch.is_tensor(prop_values_train):
-#         prop_values_train = prop_values_train.cpu().numpy()
-#     if torch.is_tensor(n_nodes_gen):
-#         n_nodes_gen = n_nodes_gen.cpu().numpy()
-#     if torch.is_tensor(prop_values_gen):
-#         prop_values_gen = prop_values_gen.cpu().numpy()
-
-#     fig, ax = plt.subplots(figsize=(10, 8))
-    
-#     # Plot training data distribution
-#     sns.kdeplot(
-#         x=n_nodes_train,
-#         y=prop_values_train,
-#         color="blue",
-#         alpha=0.5,
-#         label="Training",
-#         ax=ax
-#     )
-    
-#     # Plot generated samples distribution
-#     sns.kdeplot(
-#         x=n_nodes_gen,
-#         y=prop_values_gen,
-#         color="red",
-#         alpha=0.5,
-#         label="Generated",
-#         ax=ax
-#     )
-    
-#     ax.set_xlabel("Number of Nodes")
-#     ax.set_ylabel(f"{property_name}")
-#     ax.set_title(f"Joint Distribution of Node Count and {property_name}")
-#     # ax.legend()
-    
-#     # Save plot
-#     plt.tight_layout()
-#     plt.savefig(save_path)
-#     plt.close()
-    
-#     return fig, ax
 
 def sample_n_atoms(property_values, n_atoms_list, property_range, n_samples=1, random_seed=None):
     """
@@ -338,10 +267,3 @@ def sample_n_atoms(property_values, n_atoms_list, property_range, n_samples=1, r
     sampled_n_atoms = np.random.choice(matching_n_atoms, size=n_samples, replace=True)
     
     return sampled_n_atoms.tolist()
-
-# # Example usage
-# n_atoms = [5, 6, 7, 8, 9, 10]
-# properties = [0.35, 0.38, 0.4, 0.42, 0.45, 0.5]
-
-# sampled_atoms = sample_n_atoms(properties, n_atoms, target_value=0.4, tolerance=0.02, n_samples=3, random_seed=42)
-# print(sampled_atoms)
