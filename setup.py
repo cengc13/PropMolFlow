@@ -16,5 +16,5 @@ setup(
         "py3Dmol",
         "ase",
     ],
-    python_requires=">=3.12",
+    python_requires=">=3.11",
 )
