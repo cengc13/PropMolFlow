@@ -107,20 +107,16 @@ class GVPRegressorModule(pl.LightningModule):
             },
         }
 
-def train_gvp_regressor(config_path: Optional[str] = None, checkpoint_path: Optional[str] = None):
+def train_gvp_regressor(config_path: str, checkpoint_path: Optional[str] = None):
     """
     Main training function for GVP Regressor
     
     Args:
-        config_path: Path to the configuration file. If None, uses default config.
+        config_path: Path to the configuration file.
         checkpoint_path: Path to a checkpoint to resume training from. If None, starts fresh.
     """
-    # Load or create config
-    if config_path is not None:
-        with open(config_path) as f:
-            config = yaml.safe_load(f)
-    else:
-        config = create_default_config()
+    with open(config_path) as f:
+        config = yaml.safe_load(f)
 
     # Get the property name from config
     property_name = config['dataset']['conditioning']['property']
