@@ -91,10 +91,10 @@ def main():
     # Load multiple property values if specified
     multilple_values_to_one_property, number_of_atoms = None, None
     if args.multilple_values_file is not None:
-        print(f"Loading multiple property values from {args.multilple_values_file}\n")
+        print(f"Loading multiple property values from {args.multilple_values_file}")
         multilple_values_to_one_property = np.load(args.multilple_values_file).tolist()
     if args.number_of_atoms is not None:
-        print(f"Loading number of atoms from {args.number_of_atoms}\n")
+        print(f"Loading number of atoms from {args.number_of_atoms}")
         number_of_atoms = np.load(args.number_of_atoms).tolist()
     
     # Initialize analyzer if needed
@@ -104,9 +104,9 @@ def main():
     # Calculate number of batches
     n_batches = math.ceil(args.n_mols / args.max_batch_size)
     molecules = []
-    
-    print(f"Sampling {args.n_mols} molecules in {n_batches} batches\n")
-    
+
+    print(f"Sampling {args.n_mols} molecules in {n_batches} batches")
+
     # Sampling loop
     for batch_idx in range(n_batches):
         # print(f"Batch {batch_idx+1}/{n_batches}")
