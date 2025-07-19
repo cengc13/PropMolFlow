@@ -199,7 +199,7 @@ Then run the **train.py** script. You can either pass a config file, or pass a t
 python train.py --config=configs/without_gaussian/alpha_sum.yaml
 
 # continue training from checkpoints
-python train.py --resume=checkpoints/in-distribution/alpha/epoch=1845-step=721785.ckpt
+python train.py --resume=checkpoints/in-distribution/alpha/epoch=1845-step=721785.ckpt --config=configs/without_gaussian/alpha_sum.yaml
 ```
 The model checkpoints will be saved in `runs_qm9_valid` folder, you can modify the output dir by changing the **output_dir** argument in the config file.
 
