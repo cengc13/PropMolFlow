@@ -247,7 +247,7 @@ def main():
     # Make predictions
     predictions = predictor.predict(graphs)
     predictions = predictions.squeeze()
-    print(predictions[:100], filtered_properties[:100])
+
     # Save results
     results = {
         'predictions': predictions.numpy(),
