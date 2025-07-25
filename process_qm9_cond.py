@@ -1,37 +1,21 @@
 import argparse
-import atexit
-import json
 import pickle
-import signal
-import sys
-from pathlib import Path
-from typing import List
-
-import numpy as np
 import torch
-import tqdm
 import yaml
-from rdkit import Chem
-from multiprocessing import Pool
+import numpy as np
 import pandas as pd
-
+from rdkit import Chem
+from pathlib import Path
 from propmolflow.data_processing.geom import MoleculeFeaturizer
 from propmolflow.utils.dataset_stats import compute_p_c_given_a
-
-def chunks(lst, n):
-    """Yield successive n-sized chunks from lst."""
-    for i in range(0, len(lst), n):
-        yield lst[i:i + n]
 
 def parse_args():
     """Parse command line arguments using argparse."""
     p = argparse.ArgumentParser(description='Process geometry')
     p.add_argument('--config', type=Path, help='config file path')
     p.add_argument('--chunk_size', type=int, default=1000, help='number of molecules to process at once')
-
     p.add_argument('--n_cpus', type=int, default=1, help='number of cpus to use when computing partial charges for confomers')
-    # p.add_argument('--dataset_size', type=int, default=None, help='number of molecules in dataset, only used to truncate dataset for debugging')
-
+    
     args = p.parse_args()
 
     return args
@@ -39,14 +23,6 @@ def parse_args():
 def process_all_molecules(dataset_config, args):
     raw_dir = Path(dataset_config['raw_data_dir']) 
     sdf_file = raw_dir / 'all_fixed_gdb9.sdf'
-    # bad_mols_file = raw_dir / 'uncharacterized.txt'
-
-    # # Get ids to skip
-    # ids_to_skip = []
-    # with open(bad_mols_file, 'r') as f:
-    #     lines = f.read().split('\n')[9:-2]
-    #     for x in lines:
-    #         ids_to_skip.append(int(x.split()[0]) - 1)
 
     # Initialize storage
     mol_features = {
@@ -167,7 +143,6 @@ def process_split(split_features, split_df, split_name, split_bond_counts, datas
     # normalize tensor
     properties_mean = properties_tensor.mean(dim=0)
     properties_std = properties_tensor.std(dim=0)
-    # properties_normalized = (properties_tensor - properties_mean) / properties_std
 
     # Save the normalization parameters for later use
     normalization_params = {
@@ -271,7 +246,6 @@ def get_split_bond_counts(bond_types_list, atom_types_list):
 
 
 if __name__ == "__main__":
-
     # parse command-line args
     args = parse_args()
 
@@ -282,10 +256,6 @@ if __name__ == "__main__":
     dataset_config = config['dataset']
     if dataset_config['dataset_name'] != 'qm9':
         raise ValueError('This script only works with the qm9 dataset')
-
-    ##########3
-    # this must be changed for the qm9 dataset
-    ############3
 
     # get qm9 csv file as a pandas dataframe
     qm9_csv_file = Path(dataset_config['raw_data_dir']) / 'gdb9.sdf.csv'
@@ -361,7 +331,6 @@ if __name__ == "__main__":
         test_features['bond_types'], 
         test_features['atom_types']
     )
-
 
     split_names = ['train_data', 'train_a_data', 'train_b_data', 'val_data', 'test_data']
     for split_features, split_df, split_name, split_bond_counts in zip(
