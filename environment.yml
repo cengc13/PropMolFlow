@@ -3,19 +3,19 @@ channels:
   - pytorch
   - nvidia
   - pyg
-  - dglteam/label/cu121
+  - dglteam/label/cu124
   - conda-forge
 dependencies:
-  - python=3.10
-  - pytorch=2.2.0
+  - python=3.12
+  - pytorch=2.7.1+cu128
   - torchvision
   - torchaudio
-  - pytorch-cuda=12.1
-  - pytorch-cluster=1.6.3
-  - pytorch-scatter=2.1.2=py310_torch_2.2.0_cu121
-  - dgl=2.0.0.cu121=py310_0
-  - pytorch-lightning=2.1.3
-  - rdkit=2023.09.4
+  - pytorch-cuda=12.8
+  - pytorch-cluster=1.6.3+pt27cu128
+  - pytorch-scatter=2.1.2+pt27cu128
+  - dgl=2.4.0+cu124
+  - pytorch-lightning=2.5.2
+  - rdkit=2025.3.3
   - pystow
   - einops
   - pip
