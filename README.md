@@ -196,7 +196,7 @@ python process_qm9_cond.py --config=configs/with_gaussian/alpha_concatenate_mult
 Then run the **train.py** script. You can either pass a config file, or pass a model checkpoint to continue training.
 ```python
 # training from scratch
-python train.py --config=configs/without_gaussian/alpha_sum.yaml
+python train.py --config=configs/without_gaussian_expansion/alpha_sum.yaml
 
 # continue training from checkpoints
 python train.py --resume=checkpoints/in-distribution/alpha/epoch=1845-step=721785.ckpt --config=configs/without_gaussian/alpha_sum.yaml
