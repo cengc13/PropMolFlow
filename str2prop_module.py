@@ -11,7 +11,6 @@ class NumNodesDistribution:
     def __init__(
         self,
         histogram: Dict[int, int],
-        verbose: bool = True,
         eps: float = 1e-30
     ):
         self.eps = eps
@@ -84,10 +83,6 @@ class SimplePropertySampler:
         # Create node distribution
         self.node_dist = NumNodesDistribution(self.nodes_histogram)
         
-        # Compute mean and MAD for normalization
-        self.mean = torch.mean(property_values)
-        self.mad = torch.mean(torch.abs(property_values - self.mean))
-        
         # Create probability distribution for each unique node count
         self._create_distributions(n_nodes, property_values)
         
@@ -101,8 +96,6 @@ class SimplePropertySampler:
         save_dict = {
             'nodes_histogram': self.nodes_histogram,
             'distributions': self.distributions,
-            'mean': self.mean.cpu().numpy(),
-            'mad': self.mad.cpu().numpy(),
             'num_bins': self.num_bins,
             'device': self.device
         }
@@ -134,8 +127,6 @@ class SimplePropertySampler:
         # Restore saved state
         sampler.nodes_histogram = save_dict['nodes_histogram']
         sampler.distributions = save_dict['distributions']
-        sampler.mean = torch.tensor(save_dict['mean'], device=device)
-        sampler.mad = torch.tensor(save_dict['mad'], device=device)
         sampler.node_dist = NumNodesDistribution(sampler.nodes_histogram)
         return sampler
     
@@ -204,12 +195,11 @@ class SimplePropertySampler:
             
         Returns:
             Tuple of:
-                - Array of normalized property values [n_samples]
+                - Array of property values [n_samples]
                 - Array of node counts [n_samples]
         """
         # Set temporary seed if provided
         if seed is not None:
-            old_state = torch.get_rng_state()
             torch.manual_seed(seed)
         # Sample node counts
         sampled_nodes = self.node_dist.sample(n_samples)
@@ -225,8 +215,6 @@ class SimplePropertySampler:
             idx = dist["probs"].sample((1,))
             # Convert to value
             val = self._idx2value(idx, dist["params"])
-            # Normalize
-            # val_norm = (val - self.mean) / self.mad
             sampled_props.append(val)
             
         # Convert to numpy arrays
@@ -257,7 +245,6 @@ def sample_n_atoms(property_values, n_atoms_list, property_range, n_samples=1, r
     # Find indices where property is within the desired range
     mask = (property_values >= low_property) & (property_values <= high_property) 
     matching_n_atoms = n_atoms_list[mask]
-    # print(mask.sum())
     if len(matching_n_atoms) == 0:
         raise ValueError(f"No matching property values found within {tolerance} of {property_range}.")
     
