@@ -107,22 +107,40 @@ def main():
             batch_no_of_atoms = number_of_atoms[len(molecules): len(molecules) + batch_size]
 
         # Sample molecules
-        batch_molecules = model.sample_random_sizes(
-            batch_size,
-            device=device,
-            n_timesteps=args.n_timesteps,
-            xt_traj=args.xt_traj,
-            ep_traj=args.ep_traj,
-            stochasticity=args.stochasticity,
-            high_confidence_threshold=args.hc_thresh,
-            properties_for_sampling=args.properties_for_sampling,
-            training_mode=args.training_mode,
-            property_name=args.property_name,
-            normalization_file_path=args.normalization_file_path,
-            properties_handle_method=args.properties_handle_method,
-            multilple_values_to_one_property=batch_property,
-            number_of_atoms=batch_no_of_atoms,
-        )
+        if args.n_atoms_per_mol is None:
+            batch_molecules = model.sample_random_sizes(
+                batch_size,
+                device=device,
+                n_timesteps=args.n_timesteps,
+                xt_traj=args.xt_traj,
+                ep_traj=args.ep_traj,
+                stochasticity=args.stochasticity,
+                high_confidence_threshold=args.hc_thresh,
+                properties_for_sampling=args.properties_for_sampling,
+                training_mode=args.training_mode,
+                property_name=args.property_name,
+                normalization_file_path=args.normalization_file_path,
+                properties_handle_method=args.properties_handle_method,
+                multilple_values_to_one_property=batch_property,
+                number_of_atoms=batch_no_of_atoms,
+            )
+        else:
+            n_atoms = torch.full((batch_size,), args.n_atoms_per_mol, dtype=torch.long, device=device)
+            batch_molecules = model.sample(
+                n_atoms,
+                device=device,
+                n_timesteps=args.n_timesteps,
+                xt_traj=args.xt_traj,
+                ep_traj=args.ep_traj,
+                stochasticity=args.stochasticity,
+                high_confidence_threshold=args.hc_thresh,
+                properties_for_sampling=args.properties_for_sampling,
+                training_mode=args.training_mode,
+                property_name=args.property_name,
+                normalization_file_path=args.normalization_file_path,
+                properties_handle_method=args.properties_handle_method,
+                multilple_values_to_one_property=batch_property,
+            )
         molecules.extend(batch_molecules)
 
     # Analyze molecules if requested
@@ -148,7 +166,7 @@ def main():
 
     # New metrics
     new_metrics = compute_all_standard_metrics(args.output_file, n_mols=len(molecules))
-    print("PropMolFlow Metrics:\n")
+    print("PropMolFlow Metrics:")
     for metric, value in new_metrics.items():
         print(f"  {metric}: {value:.4f}")
 
