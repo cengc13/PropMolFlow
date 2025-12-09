@@ -30,7 +30,7 @@ Or you can simply install all packages by
 conda env create -f environment.yml
 ```
 
-**Note:** The original PropMolFlow work was developed using Nvidia A100-SXM4 and 2080Ti graphic cards. However, as we prepared the github repo, University of Florida has completed retired these A100 and 2080Ti graphic cards, and shifted to the L4 and B200 graphic cards.
+**Note:** The original PropMolFlow work was developed using Nvidia A100-SXM4 and 2080Ti graphic cards. However, as we prepared the github repo, University of Florida has completed retired these A100 and 2080Ti graphic cards, and switched to the L4 and B200 graphic cards.
 
 ## Datasets 
 
@@ -49,10 +49,12 @@ After downloading, move the **all_fixed_gdb9.sdf** file to the `data/qm9_raw/` d
 mv all_fixed_gdb9.sdf data/qm9_raw/
 ```
 
-**Note**: The SDF file `all_fixed_gdb9.sdf` ([Zenodo version 1](https://zenodo.org/records/15700961)), equivalently released as `rQM9_v0.sdf` ([Zenodo version 3](https://zenodo.org/records/17726328)), was used to train models in the PropMolFlow study. It is based on an earlier version of the data-fix pipeline and contains 935 problematic molecules, many of which can be corrected using the updated pipeline described in the paper supplementary information. In contrast, the latest version of the pipeline reduces this number to 303 problematic molecules and is available on [Zenodo version 3](https://zenodo.org/records/17726328) and HuggingFace [ColabFit rQM9](https://huggingface.co/datasets/colabfit/rQM9). The revised SDF files preserve the original molecule count and ordering to ensure compatibility with the property-value CSV files. Therefore, users should remove the provided problematic indices prior to training to ensure data consistency.
+**Note**: The SDF file `all_fixed_gdb9.sdf` ([Zenodo version 1](https://zenodo.org/records/15700961)), equivalently released as `rQM9_v0.sdf` ([Zenodo version 3](https://zenodo.org/records/17726328)), was used to train models in the PropMolFlow study. It is based on an earlier version of the data-fix pipeline and contains 935 problematic molecules, many of which can be corrected using the updated pipeline described in the paper supplementary information. In contrast, the latest version of the pipeline reduces this number to 303 problematic molecules and is available on [Zenodo version 3](https://zenodo.org/records/17726328) and HuggingFace [ColabFit rQM9](https://huggingface.co/datasets/colabfit/rQM9). The revised SDF files preserve the original molecule count and ordering to ensure consistency with the order of the property-value CSV file. Therefore, users should remove the provided problematic indices prior to training to ensure data consistency. 
+
+The property MAE and structural validity results trained on `rQM9_v1.sdf` with indices in `problematic_indices_v1.npy` removed and top-1 property embedding methods trained on the `rQM9_v0.sdf` file can be found in the `data/rQM9_v1_SDF_results` folder. Compared to the paper results trained on `rQM9_v0.sdf`, the structural validities are slightly higher (better), whereas the property MAEs are slightly higher too (worse). Afterall, conclusions in the paper hold.
 
 ### CSV File for Properties
-As for csv file contains properties values, it is provided in `data/qm9_raw` directory. 
+The property-value CSV file is provided in `data/qm9_raw` directory. 
 
 ## Training 
 **Note**: Before training the PropMolFlow generative model,  preprocess the `all_fixed_gdb9.sdf` or `rQM_v0.sdf` data first, the yaml configuration file can be arbitrary as long as it contains correct raw data paths and filenames:
@@ -75,7 +77,7 @@ The model checkpoints will be saved in `runs_qm9_valid` folder, you can modify t
 ## Inference
 
 ### PropMolFlow Checkpoints
-**Note:** We provide **12 model checkpoints** with the **lowest Mean Absolute Error (MAE) values** for **6 molecular properties** by pretrained regressor prediction, covering both **in-distribution** and **out-of-distribution** tasks.
+**Note:** We provide **12 model checkpoints** with the **lowest Mean Absolute Error (MAE) values** for **6 molecular properties** by pretrained regressor prediction, covering both **in-distribution** and **out-of-distribution** tasks. These models are trained on the `rQM9_v0.sdf`.
 
 To download and extract them, run:
 ```bash
@@ -118,10 +120,6 @@ There is **no need to download** them separately.
 **Note:** To train a GVP regressor by yourself, please run:
 ```bash
 python propmolflow/property_regressor/train_regressor.py --config=propmolflow/property_regressor/configs/regressor_alpha.yaml 
-```
-If got **ModuleNotFoundError**, then use:
-```bash
-python -m propmolflow.property_regressor.train_regressor --config=propmolflow/property_regressor/configs/regressor_alpha.yaml 
 ```
 The trained model will be saved in path `propmolflow/property_regressor/model_output`.
 
