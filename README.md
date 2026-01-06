@@ -30,7 +30,7 @@ Or you can simply install all packages by
 conda env create -f environment.yml
 ```
 
-**Note:** The original PropMolFlow work was developed using Nvidia A100-SXM4 and 2080Ti graphic cards. However, as we prepared the github repo, University of Florida has completed retired these A100 and 2080Ti graphic cards, and switched to the L4 and B200 graphic cards.
+**Note:** The original PropMolFlow work was developed using Nvidia A100-SXM4 and 2080Ti graphic cards. However, as we prepared the github repo, University of Florida has completed retired these A100 and 2080Ti graphic cards, and switched to L4 and B200 cards.
 
 ## Datasets 
 
@@ -49,9 +49,9 @@ After downloading, move the **all_fixed_gdb9.sdf** file to the `data/qm9_raw/` d
 mv all_fixed_gdb9.sdf data/qm9_raw/
 ```
 
-**Note**: The SDF file `all_fixed_gdb9.sdf` ([Zenodo version 1](https://zenodo.org/records/15700961)), equivalently released as `rQM9_v0.sdf` ([Zenodo version 3](https://zenodo.org/records/17726328)), was used to train models in the PropMolFlow study. It is based on an earlier version of the data-fix pipeline and contains 935 problematic molecules, many of which can be corrected using the updated pipeline described in the paper supplementary information. In contrast, the latest version of the pipeline reduces this number to 303 problematic molecules and is available on [Zenodo version 3](https://zenodo.org/records/17726328) and HuggingFace [ColabFit rQM9](https://huggingface.co/datasets/colabfit/rQM9). The revised SDF files preserve the original molecule count and ordering to ensure consistency with the order of the property-value CSV file. Therefore, users should remove the provided problematic indices prior to training to ensure data consistency. 
+**Note**: The SDF file `all_fixed_gdb9.sdf` ([Zenodo version 1](https://zenodo.org/records/15700961)), equivalently released as `rQM9_v0.sdf` ([Zenodo version 3](https://zenodo.org/records/17726328)), was used to train models in the PropMolFlow study. It is based on an earlier version of the data-fix pipeline and contains 935 problematic molecules, many of which can be corrected using the updated pipeline described in the paper supplementary information. In contrast, the latest version of the pipeline reduces this number to 303 problematic molecules and is available on [Zenodo version 3](https://zenodo.org/records/17726328) and HuggingFace [ColabFit rQM9](https://huggingface.co/datasets/colabfit/rQM9). The revised SDF files **preserve the original molecule** count and ordering to ensure consistency with the order of the property-value CSV file. Therefore, users should remove the provided problematic indices prior to training to ensure data consistency. 
 
-The property MAE and structural validity results trained on `rQM9_v1.sdf` with indices in `problematic_indices_v1.npy` removed and top-1 property embedding methods trained on the `rQM9_v0.sdf` file can be found in the `data/rQM9_v1_SDF_results` folder. Compared to the paper results trained on `rQM9_v0.sdf`, the structural validities are slightly higher (better), whereas the property MAEs are slightly higher too (worse). Afterall, conclusions in the paper hold.
+The property MAE and structural validity results trained on `rQM9_v1.sdf` with indices in `problematic_indices_v1.npy` removed and top-1 property embedding methods trained on the `rQM9_v0.sdf` file can be found in the `data/rQM9_v1_SDF_results` folder. Compared to the paper results trained on `rQM9_v0.sdf`, the structural validities are slightly higher (better), whereas the property MAEs are slightly higher too (worse). Afterall, conclusions in the paper hold. Moleculars indices for training generative PropMolFlow model and the GVP regressors are provided in the `data/qm9_raw` folder for both sdf versions. 
 
 ### CSV File for Properties
 The property-value CSV file is provided in `data/qm9_raw` directory. 
@@ -63,6 +63,11 @@ python process_qm9_cond.py --config=configs/with_gaussian_expansion/alpha_concat
 ```
 
 Note: current procedure removes around 700 molecules that do not pass RDKit sanitization and there are however a very small number of remaining problematic molecules (~200 molecules). All unfixed molecule indices are provided in the `problematic_indices_v0.npy` for `rQM_v0.sdf` and `problematic_indices_v1.npy` for `rQM_v1.sdf` files, available on the [zenodo repo version 3](https://zenodo.org/records/17693354/files/qm9-sdf-data.zip) or in the `data/qm9_raw` folder,
+
+To use the `rQM_v1.sdf` data, change the input sdf file to `rQM9_v1.sdf` in `process_qm9_cond.py` and skip the identified problematic indices by:
+```bash
+python process_qm9_cond.py --config=configs/with_gaussian_expansion/alpha_concatenate_multiply.yaml --ids_to_skip_file data/qm9_raw/problematic_indices_v1.npy
+```
 
 Then run the **train.py** script. You can either pass a config file, or pass a model checkpoint to continue training.
 ```python
