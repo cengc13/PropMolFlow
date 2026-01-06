@@ -15,14 +15,15 @@ def parse_args():
     p.add_argument('--config', type=Path, help='config file path')
     p.add_argument('--chunk_size', type=int, default=1000, help='number of molecules to process at once')
     p.add_argument('--n_cpus', type=int, default=1, help='number of cpus to use when computing partial charges for confomers')
+    p.add_argument('--ids_to_skip_file', type=Path, default=None, help='path to a .npy file containing indices of molecules to skip during processing')
     
     args = p.parse_args()
 
     return args
 
-def process_all_molecules(dataset_config, args):
+def process_all_molecules(dataset_config, args, ids_to_skip=None):
     raw_dir = Path(dataset_config['raw_data_dir']) 
-    sdf_file = raw_dir / 'all_fixed_gdb9.sdf'
+    sdf_file = raw_dir / 'rQM9_v1.sdf'
 
     # Initialize storage
     mol_features = {
@@ -38,6 +39,7 @@ def process_all_molecules(dataset_config, args):
     
     # Process in chunks like original code
     mol_reader = Chem.SDMolSupplier(str(sdf_file), removeHs=False, sanitize=True)
+
     mol_featurizer = MoleculeFeaturizer(dataset_config['atom_map'], n_cpus=args.n_cpus)
     
     all_mols = []
@@ -45,6 +47,9 @@ def process_all_molecules(dataset_config, args):
     chunk_size = args.chunk_size
     
     for global_idx, mol in enumerate(mol_reader):
+        # Skip if in skip list or if None
+        if ids_to_skip is not None and global_idx in ids_to_skip:
+            continue
         # if mol is None or global_idx in ids_to_skip:
         if mol is None:
             continue
@@ -260,8 +265,12 @@ if __name__ == "__main__":
     # get qm9 csv file as a pandas dataframe
     qm9_csv_file = Path(dataset_config['raw_data_dir']) / 'gdb9.sdf.csv'
     df = pd.read_csv(qm9_csv_file)
+    ids_to_skip = np.load(args.ids_to_skip_file) if args.ids_to_skip_file is not None else None
 
-    mol_features, valid_mol_idxs, all_bond_order_counts = process_all_molecules(dataset_config, args)
+    mol_features, valid_mol_idxs, all_bond_order_counts = process_all_molecules(dataset_config, args, ids_to_skip)
+
+    # filter dataframe to only include valid molecules
+    df = df.iloc[valid_mol_idxs].reset_index(drop=True)
 
     n_samples = len(valid_mol_idxs)
     n_train = 100000
@@ -304,11 +313,11 @@ if __name__ == "__main__":
     test_features = get_split_features(test_idx, mol_features)
 
     # Get properties for each split from the original dataframe
-    train_df = df.iloc[train_mol_idx]
-    train_a_df = df.iloc[train_a_mol_idx]
-    train_b_df = df.iloc[train_b_mol_idx]
-    val_df = df.iloc[val_mol_idx]
-    test_df = df.iloc[test_mol_idx]
+    train_df = df.iloc[train_idx]      # ✅ Use shuffled indices
+    train_a_df = df.iloc[train_a_idx]  # ✅ Use shuffled indices  
+    train_b_df = df.iloc[train_b_idx]  # ✅ Use shuffled indices
+    val_df = df.iloc[val_idx]          # ✅ Use shuffled indices
+    test_df = df.iloc[test_idx]        # ✅ Use shuffled indices
 
     # Get bond counts for each split
     train_bond_counts = get_split_bond_counts(
