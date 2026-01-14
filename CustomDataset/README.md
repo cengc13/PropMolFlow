@@ -25,7 +25,7 @@ Place your dataset files in the `./data/qme14s_raw` folder:
 
 **Important:** Ensure that the order of molecules in the SDF file matches the order of entries in the CSV file.
 
-*Note: These files are not provided in the repository due to size limitations. You can download them from the [original source](https://doi.org/10.1021/acs.jpclett.5c00839).*
+*Note: These files are not provided in the repository due to size limitations. You can download them from the [our new work **MolGuidance**](https://github.com/Liu-Group-UF/MolGuidance) or [original source](https://doi.org/10.1021/acs.jpclett.5c00839).*
 
 ### Update Config Files
 
