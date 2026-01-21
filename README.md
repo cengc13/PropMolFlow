@@ -239,11 +239,22 @@ To use your own dataset, please follow the steps in folder `CustomDataset`.
 If you find this work useful, please cite the following paper:
 
 ```bibtex
-@article{zeng2025propmolflow,
-  title={PropMolFlow: Property-guided Molecule Generation with Geometry-Complete Flow Matching},
-  author={Zeng, Cheng and Jin, Jirui and Karypis, George and Transtrum, Mark and Tadmor, Ellad B. and Hennig, Richard G. and Roitberg, Adrian and Martiniani, Stefano and Liu, Mingjie},
-  journal={arXiv preprint arXiv:2505.21469},
-  year={2025}
+@article{zeng_propmolflow_2026,
+	title = {{PropMolFlow}: property-guided molecule generation with geometry-complete flow matching},
+	copyright = {2026 The Author(s), under exclusive licence to Springer Nature America, Inc.},
+	issn = {2662-8457},
+	shorttitle = {{PropMolFlow}},
+	url = {https://www.nature.com/articles/s43588-025-00946-y},
+	doi = {10.1038/s43588-025-00946-y},
+	language = {en},
+	urldate = {2026-01-21},
+	journal = {Nature Computational Science},
+	publisher = {Nature Publishing Group},
+	author = {Zeng, Cheng and Jin, Jirui and Ambrose, Connor and Karypis, George and Transtrum, Mark and Tadmor, Ellad B. and Hennig, Richard G. and Roitberg, Adrian and Martiniani, Stefano and Liu, Mingjie},
+	month = jan,
+	year = {2026},
+	keywords = {Cheminformatics, Computational science},
+	pages = {1--10},
 }
 ```
 
