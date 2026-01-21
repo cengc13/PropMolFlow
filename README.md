@@ -1,13 +1,13 @@
 # PropMolFlow: Property-guided Molecule Generation with Geometry-Complete Flow Matching
 [![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg?style=flat)](https://arxiv.org/abs/2505.21469)
 
-The paper: [*"PropMolFlow: Property-guided Molecule Generation with Geometry-Complete Flow Matching"*](https://arxiv.org/abs/2505.21469): 
-<!-- and Demo on an **[interative website](https://propmolflow-website.vercel.app/)**--> 
+The paper: [*"PropMolFlow: Property-guided Molecule Generation with Geometry-Complete Flow Matching"*](https://www.nature.com/articles/s43588-025-00946-y): 
+and Demo on an **[interative website](https://propmolflow-website.vercel.app/)** 
 
 ![Image](overview_page.jpg)
 
 ## Dependencies and Setup
-**Please Make Sure `cuda Version >= 12.8` and you have `conda` installed **
+**Please Make Sure `cuda Version >= 12.8` and you have `conda` installed**
 
 
 Run the following commands in your terminal to set up `propmolflow` (We have tested the installation on **Nvidia L4 and Blackwell B200** GPUs): 
